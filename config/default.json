@@ -1,3 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://hardeep0296:hardeep0296@cluster0.d5mjk.mongodb.net/EcommerceDB?retryWrites=true&w=majority"
+    "mongoURI":"mongodb+srv://hardeep0296:hardeep0296@cluster0.ex430.mongodb.net/EcommerceDB?retryWrites=true&w=majority",
+    "jwtSecret":"MyLittleSecret"
 }
