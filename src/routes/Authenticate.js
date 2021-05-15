@@ -69,4 +69,56 @@ router.post("/signUp", [
 });
 
 
+// @access  Public
+// @desc    Auth Route
+// @route   POST api/auth/signIn
+
+router.post("/signIn", [
+  check('email', 'Enter a valid email!').isEmail(),
+  check('password', 'enter a password with length 6 or more!').isLength({
+    min: 6,
+  }),
+], async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const {email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+    if(!user){
+      res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+    }
+    let isMatch = bcrypt.compare(password, user.password);
+    
+    if(isMatch){
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      }
+  
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 36000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });   //send token back to client
+        });
+    }else{
+      res.status(401).json({ errors: [{ msg: 'Invalid Credentials' }] });
+    }
+    
+  } catch (error) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;

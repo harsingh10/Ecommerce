@@ -3,7 +3,6 @@ const connectDB = require("./config/db");
 const Authenticate = require("./src/routes/Authenticate");
 const app = express();
 
-
 //connect to db
 connectDB();
 
